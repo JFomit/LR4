@@ -1,0 +1,11 @@
+
+CompileFlags:
+  Add: [-std=c++20, -Wall, -Wextra, -Werror, -Wconversion, -Wshadow, -Wunreachable-code]
+InlayHints:
+  ParameterNames: No
+  DeducedTypes: Yes
+Diagnostics:
+  UnusedIncludes: Strict
+  ClangTidy:
+    Add: [bugprone-*, cert-*, modernize-*, performance-*]
+    Remove: [bugprone-easily-swappable-parameters, modernize-use-trailing-return-type]
