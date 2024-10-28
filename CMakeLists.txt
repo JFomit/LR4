@@ -12,5 +12,5 @@ include_directories(include)
 
 add_subdirectory(lib/ctoast)
 add_subdirectory(Task_1)
-# add_subdirectory(Task_2)
+add_subdirectory(Task_2)
 add_subdirectory(lib/googletest)
