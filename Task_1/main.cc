@@ -1,4 +1,6 @@
 #include <expected>
+#include "app.h"
+#include "ctoast/array.h"
 #include "ctoast/control.h"
 #include "ctoast/io.h"
 
@@ -19,7 +21,25 @@ int main() {
   return 0;
 }
 
-CinResult<void> Run(Context &_) {
+const int kSize = 5;
 
-  return {};
+CinResult<void> Run(Context &_) {
+  int kBackingArray[kSize] = {};
+  std::cout << "Введите массив из " << kSize << " чисел (через <Enter>):\n";
+  auto array = ctoast::StaticArray(kBackingArray);
+
+  return ctoast::ReadArray(array)
+      .transform_error([](std::string err) {
+        ctoast::PrintError(err);
+        return err;
+      })
+      .and_then([&array]() {
+        if (app::IsSorted(array)) {
+          std::cout << "Массив отсортирован.\n";
+        } else {
+          std::cout << "Массив хаотичен.\n";
+        }
+
+        return CinResult<void>();
+      });
 }

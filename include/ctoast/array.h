@@ -7,9 +7,10 @@ namespace ctoast {
 template <typename T>
 class Array {
  public:
+  Array() = default;
   virtual ~Array() = default;
   Array(Array &&other) noexcept = default;
-  virtual Array &operator=(Array<T> &&other) noexcept = 0;
+  virtual Array &operator=(Array<T> &&other) noexcept = default;
 
   [[nodiscard]] virtual size_t size() const = 0;
 
@@ -22,13 +23,13 @@ class StaticArray : public Array<T> {
  public:
   using array_t = T[S];
 
-  StaticArray(const array_t &array) : array_(array) {}
+  StaticArray(const array_t &array) : array_((T *)array) {}
 
   StaticArray(StaticArray &&other) noexcept : array_(other.array_) {
     other.array_ = nullptr;
   }
 
-  virtual StaticArray &operator=(StaticArray &&other) noexcept {
+  StaticArray &operator=(StaticArray &&other) noexcept {
     if (&other != this) {
       array_ = other.array_;
       other.array_ = nullptr;
@@ -43,7 +44,7 @@ class StaticArray : public Array<T> {
   T &operator[](size_t index) override { return array_[index]; }
 
  private:
-  const T *array_;
+  T *array_;
 };
 
 template <typename T>
@@ -74,8 +75,8 @@ class DynamicArray : public Array<T> {
   T &operator[](size_t index) override { return array_[index]; }
 
  private:
-  const size_t size_;
-  const T *array_;
+  size_t size_;
+  T *array_;
 };
 }  // namespace ctoast
 

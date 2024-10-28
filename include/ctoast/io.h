@@ -7,7 +7,6 @@
 #include <iostream>
 #include <limits>
 #include <string>
-#include <variant>
 #include "ctoast/array.h"
 
 namespace ctoast {
@@ -24,13 +23,13 @@ CinResult<T> ReadT(const char *error_str) {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    return CinResult<T>(error_str);
+    return std::unexpected(error_str);
   }
 
   if (!std::cin.eof() && std::cin.peek() != '\n') {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    return CinResult<T>(error_str);
+    return std::unexpected(error_str);
   }
 
   return CinResult<T>(value);
@@ -47,16 +46,18 @@ CinResult<T> Read(const char *error_str) {
 }
 
 template <typename T, size_t S>
-bool ReadArray(StaticArray<T, S> &buffer) {
+CinResult<void> ReadArray(StaticArray<T, S> &buffer) {
   for (size_t i = 0; i < S; ++i) {
     auto result = Read<T>();
 
     if (result.has_value()) {
-      buffer[i] = std::get<T>(result);
+      buffer[i] = result.value();
     } else {
-      return false;
+      return std::unexpected<std::string>(result.error());
     }
   }
+
+  return {};
 }
 
 template <typename T>
