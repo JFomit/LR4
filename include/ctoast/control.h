@@ -29,8 +29,9 @@ void PrintDescription(const std::string &description);
 void PrintTask(const std::string &task_name,
                std::optional<std::string> task_option);
 
-using UsageOption = char;
 void PrintGreeting();
+
+using UsageOption = char;
 CinResult<UsageOption> GetUsage();
 
 void PrintError(const std::string &error);

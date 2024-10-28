@@ -1,16 +1,19 @@
 #ifndef INCLUDE_LIB_TERMINAL_H_
 #define INCLUDE_LIB_TERMINAL_H_
 
+#include <cstddef>
+#include <expected>
 #include <ios>
 #include <iostream>
 #include <limits>
 #include <string>
 #include <variant>
+#include "ctoast/array.h"
 
 namespace ctoast {
 
 template <typename T>
-using CinResult = std::variant<std::string, T>;
+using CinResult = std::expected<T, std::string>;
 
 template <typename T>
 CinResult<T> ReadT(const char *error_str) {
@@ -41,6 +44,35 @@ CinResult<T> Read() {
 template <typename T>
 CinResult<T> Read(const char *error_str) {
   return ReadT<T>(error_str);
+}
+
+template <typename T, size_t S>
+bool ReadArray(StaticArray<T, S> &buffer) {
+  for (size_t i = 0; i < S; ++i) {
+    auto result = Read<T>();
+
+    if (result.has_value()) {
+      buffer[i] = std::get<T>(result);
+    } else {
+      return false;
+    }
+  }
+}
+
+template <typename T>
+CinResult<DynamicArray<T>> ReadArray(size_t size) {
+  DynamicArray<T> arr = DynamicArray<T>(size);
+
+  for (size_t i = 0; i < size; ++i) {
+    auto result = Read<T>();
+    if (result.has_value()) {
+      arr[i] = result.value();
+    } else {
+      return std::unexpected(result.error());
+    }
+  }
+
+  return CinResult<DynamicArray<T>>(arr);
 }
 
 template <>

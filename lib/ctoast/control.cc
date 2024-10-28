@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include <variant>
 
 #include "ctoast/io.h"
 
@@ -76,19 +75,19 @@ UsageData::Builder &UsageData::Builder::Push(Usage usage) {
 }
 
 UsageData UsageData::Builder::Build() {
-  return UsageData(Accumulator);
+  return {Accumulator};
 }
 
 void UsageData::operator()(Context &ctx) {
   std::cout << "~> ";
   CinResult<char> option = Read<char>("Ожидался символ");
 
-  if (std::holds_alternative<std::string>(option)) {
-    PrintError(std::get<std::string>(option));
+  if (!option.has_value()) {
+    PrintError(option.error());
     return;
   }
 
-  char symbol = std::get<char>(option);
+  char symbol = option.value();
   if (usages_.count(symbol) == 0) {
     std::string error_head("Неизвестная опция - ");
     PrintError(error_head.append(1, symbol));

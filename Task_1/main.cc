@@ -1,15 +1,25 @@
-#include "app.h"
+#include <expected>
 #include "ctoast/control.h"
+#include "ctoast/io.h"
 
-using ctoast::Context, ctoast::Usage;
+using ctoast::CinResult, ctoast::Context, ctoast::Usage;
+
+CinResult<void> Run(Context &);
 
 int main() {
   ctoast::PrintMenu(
       {.Description = "Вводит одномерный статический массив из 10 чисел.",
        .TaskName = "1",
        .TaskOption = std::nullopt,
-       .Usages = {Usage('q', "Выход", [](Context &ctx) -> void { ctx.Exit(); }),
-                  Usage('r', "Ввести и вычислить", DoMain)}});
+       .Usages = {
+           Usage('r', "Запуск", Run),
+           Usage('q', "Выход", [](Context &ctx) -> void { ctx.Exit(); }),
+       }});
 
   return 0;
+}
+
+CinResult<void> Run(Context &_) {
+
+  return {};
 }
