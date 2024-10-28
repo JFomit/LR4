@@ -34,7 +34,7 @@ CinResult<void> Run(Context &_) {
         return err;
       })
       .and_then([&array]() {
-        if (app::IsSorted(array)) {
+        if (app::IsSortedDescending(array)) {
           std::cout << "Массив отсортирован.\n";
         } else {
           std::cout << "Массив хаотичен.\n";

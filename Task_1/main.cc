@@ -10,7 +10,8 @@ CinResult<void> Run(Context &);
 
 int main() {
   ctoast::PrintMenu(
-      {.Description = "Вводит одномерный статический массив из 10 чисел.",
+      {.Description = "Вводит одномерный статический массив из 5 чисел. И "
+                      "определяет, отсортирован ли массив по убыванию.",
        .TaskName = "1",
        .TaskOption = std::nullopt,
        .Usages = {
@@ -34,10 +35,11 @@ CinResult<void> Run(Context &_) {
         return err;
       })
       .and_then([&array]() {
-        if (app::IsSorted(array)) {
-          std::cout << "Массив отсортирован.\n";
+        if (app::IsSortedDescending(array)) {
+          std::cout << "Массив отсортирован по убыванию.\n";
         } else {
-          std::cout << "Массив хаотичен.\n";
+          std::cout << "Массив хаотичен или, по крайней мере, не отсортирован "
+                       "по убыванию.\n";
         }
 
         return CinResult<void>();

@@ -1,7 +1,7 @@
 #include "app.h"
 
 namespace app {
-bool IsSorted(const ctoast::Array<int> &array) {
+bool IsSortedDescending(const ctoast::Array<int> &array) {
   if (array.size() <= 2) {
     return true;
   }
