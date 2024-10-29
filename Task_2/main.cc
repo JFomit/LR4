@@ -1,40 +1,43 @@
-#include <expected>
+#include <cstddef>
+#include <iomanip>
+#include <optional>
 #include "app.h"
-#include "ctoast/array.h"
+#include "ctoast/array2d.h"
 #include "ctoast/control.h"
 #include "ctoast/io.h"
 
-using ctoast::CinResult, ctoast::Context, ctoast::Usage;
-
-CinResult<void> Run(Context &);
+ctoast::CinResult<void> Run(ctoast::Context &ctx);
 
 int main() {
   ctoast::PrintMenu(
-      {.Description = "Вводит одномерный статический массив из 10 чисел.",
-       .TaskName = "1",
-       .TaskOption = std::nullopt,
-       .Usages = {
-           Usage('r', "Запуск", Run),
-           Usage::CreateQuit(),
-       }});
-
-  return 0;
+      {.Description =
+           "Вычисляет произведение положительных элементов матрицы (хардкод), "
+           "расположенных ниже главной диагонали.",
+       .TaskName = "2",
+       .TaskOption = std::make_optional("4"),
+       .Usages = {ctoast::Usage('r', "Запуск", Run),
+                  ctoast::Usage::CreateQuit()}});
 }
 
-const int kSize = 5;
+const int kBackingMatrix[4][3] = {{1, 2, 3},
+                                  {5, 6, 7},
+                                  {9, 10, 11},
+                                  {12, 13, 14}};
+ctoast::CinResult<void> Run(ctoast::Context &_) {
+  auto matrix = ctoast::StaticArray2d(kBackingMatrix);
 
-CinResult<void> Run(Context &_) {
-  int kBackingArray[kSize] = {};
-  std::cout << "Введите массив из " << kSize << " чисел (через <Enter>):\n";
-  auto array = ctoast::StaticArray(kBackingArray);
+  std::cout << "Исходные данные:\n";
 
-  return ctoast::ReadArray(array).and_then([&array]() {
-    if (app::IsSortedDescending(array)) {
-      std::cout << "Массив отсортирован.\n";
-    } else {
-      std::cout << "Массив хаотичен.\n";
+  for (size_t i = 0; i < matrix.width(); ++i) {
+    for (size_t j = 0; j < matrix.height(); ++j) {
+      std::cout << std::setw(2) << std::setfill(' ') << matrix[i, j] << ' ';
     }
+    std::cout << '\n';
+  }
 
-    return CinResult<void>();
-  });
+  std::cout << "Искомое произведение: "
+            << app::GetProductOfPositiveElementsLowerThanMainDiagonal(matrix)
+            << '\n';
+
+  return {};
 }

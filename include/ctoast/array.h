@@ -40,7 +40,6 @@ class StaticArray : public Array<T> {
   [[nodiscard]] size_t size() const override { return S; }
 
   const T &operator[](size_t index) const override { return array_[index]; }
-
   T &operator[](size_t index) override { return array_[index]; }
 
  private:

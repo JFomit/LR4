@@ -1,20 +1,20 @@
 #include "app.h"
+#include <algorithm>
+#include <cstddef>
 
 namespace app {
-bool IsSortedDescending(const ctoast::Array<int> &array) {
-  if (array.size() <= 2) {
-    return true;
+unsigned long GetProductOfPositiveElementsLowerThanMainDiagonal(
+    const ctoast::Array2d<int> &matrix) {
+  size_t min = std::min(matrix.width(), matrix.height());
+
+  unsigned long productSoFar = 1;
+  for (size_t j = 0; j < min; ++j) {
+    for (size_t i = 0; i < j; ++i) {
+      int current = matrix[j, i];
+      productSoFar *= current > 0 ? (unsigned long)current : 1;
+    }
   }
 
-  bool all_less = true;
-
-  for (size_t i = 1; i < array.size(); ++i) {
-    int last = array[i - 1];
-    int current = array[i];
-
-    all_less &= current <= last;
-  }
-
-  return all_less;
+  return productSoFar;
 }
 }  // namespace app

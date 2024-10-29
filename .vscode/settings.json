@@ -9,5 +9,9 @@
                 ],
     "editor.tabSize": 2,
     "clangd.restartAfterCrash": true,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "lldb.displayFormat": "auto",
+    "lldb.showDisassembly": "auto",
+    "lldb.dereferencePointers": true,
+    "lldb.consoleMode": "evaluate"
 }
