@@ -9,21 +9,17 @@ TEST(app_tests, small_array) {
   int data1[] = {0, 1};
   int data2[] = {42, -519};
   int data3[] = {42};
-  // int data4[] = {};
   auto array1 = StaticArray(data1);
   auto array2 = StaticArray(data2);
   auto array3 = StaticArray(data3);
-  // auto array4 = StaticArray<int, 0>(data4);
   // Act
   bool is_sorted1 = app::IsSortedDescending(array1);
   bool is_sorted2 = app::IsSortedDescending(array2);
   bool is_sorted3 = app::IsSortedDescending(array3);
-  // bool is_sorted4 = app::IsSorted(array4);
   // Assert
-  ASSERT_TRUE(is_sorted1);
+  ASSERT_FALSE(is_sorted1);
   ASSERT_TRUE(is_sorted2);
   ASSERT_TRUE(is_sorted3);
-  // ASSERT_TRUE(is_sorted4);
 }
 
 TEST(app_tests, sorted_array_less) {
@@ -33,7 +29,7 @@ TEST(app_tests, sorted_array_less) {
   // Act
   bool is_sorted = app::IsSortedDescending(array);
   // Assert
-  ASSERT_TRUE(is_sorted);
+  ASSERT_FALSE(is_sorted);
 }
 
 TEST(app_tests, sorted_array_greater) {
@@ -86,6 +82,6 @@ TEST(app_tests, unsorted_array_one) {
   bool is_ordered1 = app::IsSortedDescending(array1);
   bool is_ordered2 = app::IsSortedDescending(array2);
   // Assert
-  ASSERT_TRUE(is_ordered1);
+  ASSERT_FALSE(is_ordered1);
   ASSERT_TRUE(is_ordered2);
 }

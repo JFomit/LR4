@@ -59,10 +59,17 @@ void PrintError(const std::string &error) {
 }
 
 Usage::Usage(char option, std::string desc,
-             std::function<void(Context &)> func) {
+             std::function<CinResult<void>(Context &)> func) {
   Option = option;
   Descritption = std::move(desc);
   Function = std::move(func);
+}
+
+Usage Usage::CreateQuit() {
+  return {'q', "Выход", [](Context &ctx) -> CinResult<void> {
+            ctx.Exit();
+            return {};
+          }};
 }
 
 UsageData::UsageData(std::map<char, Usage> usages) {
@@ -95,7 +102,11 @@ void UsageData::operator()(Context &ctx) {
   }
 
   const Usage &usage = usages_.at(symbol);
-  usage.Function(ctx);
+  auto result = usage.Function(ctx);
+  std::ignore = result.transform_error([](const std::string &err) {
+    PrintError(err);
+    return err;
+  });
 }
 
 std::function<void(Context &)> CreateUsages(
@@ -112,8 +123,9 @@ std::function<void(Context &)> CreateUsages(
     str += u.Descritption;
     str.append(1, '\n');
   });
-  b.Push(Usage('h', "Справка", [str](Context &_) -> void {
+  b.Push(Usage('h', "Справка", [str](Context &_) -> auto {
     std::cout << str << "h - Эта справка\n";
+    return CinResult<void>();
   }));
 
   return b.Build();

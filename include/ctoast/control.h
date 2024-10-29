@@ -39,9 +39,12 @@ void PrintError(const std::string &error);
 struct Usage {
   char Option;
   std::string Descritption;
-  std::function<void(Context &)> Function;
+  std::function<CinResult<void>(Context &)> Function;
 
-  Usage(char option, std::string desc, std::function<void(Context &)> func);
+  static Usage CreateQuit();
+
+  Usage(char option, std::string desc,
+        std::function<CinResult<void>(Context &)> func);
 };
 
 class UsageData {

@@ -15,7 +15,7 @@ int main() {
        .TaskOption = std::nullopt,
        .Usages = {
            Usage('r', "Запуск", Run),
-           Usage('q', "Выход", [](Context &ctx) -> void { ctx.Exit(); }),
+           Usage::CreateQuit(),
        }});
 
   return 0;
@@ -28,18 +28,13 @@ CinResult<void> Run(Context &_) {
   std::cout << "Введите массив из " << kSize << " чисел (через <Enter>):\n";
   auto array = ctoast::StaticArray(kBackingArray);
 
-  return ctoast::ReadArray(array)
-      .transform_error([](std::string err) {
-        ctoast::PrintError(err);
-        return err;
-      })
-      .and_then([&array]() {
-        if (app::IsSortedDescending(array)) {
-          std::cout << "Массив отсортирован.\n";
-        } else {
-          std::cout << "Массив хаотичен.\n";
-        }
+  return ctoast::ReadArray(array).and_then([&array]() {
+    if (app::IsSortedDescending(array)) {
+      std::cout << "Массив отсортирован.\n";
+    } else {
+      std::cout << "Массив хаотичен.\n";
+    }
 
-        return CinResult<void>();
-      });
+    return CinResult<void>();
+  });
 }
