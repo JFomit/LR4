@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <optional>
 #include "app.h"
-#include "ctoast/array2d.h"
 #include "ctoast/control.h"
 #include "ctoast/io.h"
 
@@ -17,5 +16,16 @@ int main() {
 }
 
 ctoast::CinResult<void> Run(ctoast::Context &_) {
-  return {};
+  return app::ReadDynamicArray().transform([](auto matrix) -> void {
+    app::PopulateMaxInRows(matrix);
+    app::SortByMaxInRow(matrix);
+
+    ctoast::PrintLine("Отсортированная матрица:");
+    for (size_t j = 0; j < matrix.height(); ++j) {
+      for (size_t i = 1; i < matrix.width(); ++i) {
+        std::cout << std::setw(2) << matrix[j, i] << ' ';
+      }
+      std::cout << '\n';
+    }
+  });
 }

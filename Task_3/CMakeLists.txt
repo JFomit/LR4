@@ -5,5 +5,5 @@ add_executable(${TASK} main.cc app.cc)
 target_link_libraries(${TASK} PUBLIC ctoast)
 
 add_executable(${TASK}_tests tests.cc app.cc)
-target_link_libraries(${TASK}_tests gtest_main)
+target_link_libraries(${TASK}_tests gtest_main ctoast)
 add_test(NAME ${TASK}_tests COMMAND ${TASK}_tests)
