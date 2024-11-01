@@ -4,7 +4,7 @@ project(LR4)
 set(CMAKE_CXX_STANDARD 23)
 set(CXX_STANDARD_REQUIRED ON)
 
-add_definitions(-D__cpp_concepts=202002L) # magic to make std::expectd compile. Apparently clang's concepts are not ready yet
+add_definitions(-D__cpp_concepts=202002L) # magic to make std::expected compile. Apparently clang's concepts are not ready yet
 
 enable_testing()
 
