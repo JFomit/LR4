@@ -8,11 +8,14 @@
 ctoast::CinResult<void> Run(ctoast::Context &ctx);
 
 int main() {
-  ctoast::PrintMenu({.Description = "todo!()",
-                     .TaskName = "3",
-                     .TaskOption = std::make_optional("4"),
-                     .Usages = {ctoast::Usage('r', "Запуск", Run),
-                                ctoast::Usage::CreateQuit()}});
+  ctoast::PrintMenu(
+      {.Description =
+           "Вводит матрицу размером NxM и упорядочивает ее "
+           "строки по возрастанию наибольших элементов в строках матрицы.",
+       .TaskName = "3",
+       .TaskOption = std::make_optional("4"),
+       .Usages = {ctoast::Usage('r', "Запуск", Run),
+                  ctoast::Usage::CreateQuit()}});
 }
 
 ctoast::CinResult<void> Run(ctoast::Context &_) {
